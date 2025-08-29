@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Phaser Box 2D</title>
+    <style>
+        body, html {
+            margin: 0;
+            padding: 0;
+        }
+    </style>
+</head>
+<body>
+    <div id="phaser-example"></div>
+
+    <script>
+        function getQueryParam (param)
+        {
+            const urlParams = new URLSearchParams(window.location.search);
+
+            return urlParams.get(param);
+        }
+
+        const scriptSrc = getQueryParam('src');
+
+        if (scriptSrc)
+        {
+            const script = document.createElement('script');
+            script.type = 'module';
+            script.src = `./${scriptSrc}.js`;
+            document.body.appendChild(script);
+        }
+        else
+        {
+            console.warn('No "src" query parameter found. Loading default script...');
+        }
+    </script>
+</body>
+</html>

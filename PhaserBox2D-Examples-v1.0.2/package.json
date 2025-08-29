@@ -1,0 +1,22 @@
+{
+  "name": "box2d-examples",
+  "version": "1.0.2",
+  "private": true,
+  "description": "Phaser Box2D Examples",
+  "directories": {
+    "doc": "docs",
+    "example": "examples"
+  },
+  "scripts": {
+    "examples": "node examples.mjs"
+  },
+  "author": "Phaser Studio Inc",
+  "license": "UNLICENSED",
+  "bugs": {
+    "url": "https://github.com/phaserjs/phaser-box2d/issues"
+  },
+  "homepage": "https://phaser.io/box2d",
+  "devDependencies": {
+    "esbuild": "^0.24.0"
+  }
+}

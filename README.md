@@ -1,6 +1,45 @@
-# Phaser Framework by SmtheApex
+# Phaser Framework 2025 - Advanced H5 Mobile Game Framework
 
-A comprehensive, modular Phaser 3 framework with RexUI integration, DOM overlay system, and mobile-first design.
+A cutting-edge, reactive Phaser 3 framework with RxJS integration, advanced mobile optimizations, and cross-platform features for building scalable HTML5 games in 2025.
+
+## 🚀 New 2025 Features
+
+### ⚡ RxJS Reactive Programming
+- **ReactiveEventBus**: Advanced event system with RxJS streams
+- **GameStateManager**: Global reactive state management 
+- **Combo Detection**: Gesture sequences and input patterns
+- **Performance Streaming**: Real-time metrics monitoring
+
+### 📱 Advanced Mobile Support
+- **GestureManager**: Multi-touch gesture recognition (tap, swipe, pinch, long-press)
+- **AdaptiveRenderer**: Dynamic quality adjustment based on device performance
+- **Orientation Handling**: Automatic layout adaptation
+- **Touch Optimization**: Low-latency touch input processing
+
+### 🎵 Spatial Audio System
+- **ReactiveAudioManager**: 3D positional audio with RxJS
+- **Dynamic Music**: Layer-based adaptive music system
+- **Mobile Audio**: Optimized for mobile H5 audio restrictions
+- **Audio Pooling**: Efficient memory management
+
+
+### 📐 Advanced Responsive Design (2025)
+- **Enhanced Breakpoints**: 15+ device-specific breakpoints (mobile_xs to desktop_xxl)
+- **Container Queries**: Component-based responsive design
+- **Safe Area Support**: iOS notch and Android navigation handling  
+- **Orientation Locking**: Programmatic screen orientation control
+
+### 🖼️ Embed & Fullscreen (2025)
+- **Smart Embed Detection**: Multi-method iframe and webview detection
+- **Parent Communication**: Secure postMessage API integration
+- **Fullscreen API**: Modern fullscreen with orientation lock
+- **Capability Detection**: Runtime feature and restriction analysis
+
+### 🔧 Performance Optimization
+- **Device Tier Detection**: Automatic hardware capability assessment
+- **Adaptive Quality**: Dynamic rendering quality adjustment
+- **Memory Management**: Smart asset loading and cleanup
+- **Battery Optimization**: Power-efficient rendering modes
 
 ## Features
 

@@ -2,7 +2,9 @@ import Phaser from 'phaser'
 import UIPlugin from 'phaser3-rex-plugins/templates/ui/ui-plugin'
 import { FrameworkConfig } from '../types'
 import { EventBus } from '../utils/EventBus'
-import { ResponsiveManager } from '../ui/ResponsiveManager'
+import { ReactiveEventBus } from '../utils/ReactiveEventBus'
+import { EnhancedResponsiveManager } from './EnhancedResponsiveManager'
+import { EnhancedEmbedManager } from './EnhancedEmbedManager'
 import { PWAManager } from '../mobile/PWAManager'
 
 /**
@@ -12,12 +14,15 @@ export class GameManager {
   private game: Phaser.Game | null = null
   private config: FrameworkConfig
   private eventBus: EventBus
-  private responsiveManager?: ResponsiveManager
+  private reactiveEventBus: ReactiveEventBus
+  private responsiveManager?: EnhancedResponsiveManager
+  private embedManager?: EnhancedEmbedManager
   private pwaManager?: PWAManager
 
   constructor(config: FrameworkConfig) {
     this.config = this.mergeWithDefaults(config)
     this.eventBus = EventBus.getInstance()
+    this.reactiveEventBus = ReactiveEventBus.getInstance()
   }
 
   /**
@@ -78,11 +83,12 @@ export class GameManager {
     ;(window as any).game = this.game
     ;(window as any).frameworkConfig = this.config
 
-    // Initialize responsive manager
-    if (this.config.ui?.responsiveBreakpoints) {
-      this.responsiveManager = new ResponsiveManager(this.game, this.config.ui.responsiveBreakpoints)
-    }
-
+    // Initialize enhanced responsive manager
+    this.responsiveManager = new EnhancedResponsiveManager(this.game, this.config.ui?.responsiveBreakpoints as any)
+    
+    // Initialize enhanced embed manager
+    this.embedManager = new EnhancedEmbedManager(this.game)
+    
     // Initialize PWA manager
     if (this.config.mobile?.enablePWA) {
       this.pwaManager = new PWAManager()
@@ -93,7 +99,7 @@ export class GameManager {
   }
 
   /**
-   * Determine render type based on environment
+   * Enhanced render type detection for 2025
    */
   private getRenderType(): number {
     // Check for forced canvas mode
@@ -102,26 +108,97 @@ export class GameManager {
       return Phaser.CANVAS
     }
     
-    // Check if embedded
-    if (this.isEmbedded()) {
-      console.log('🎮 Embed mode: Using Canvas')
+    // Enhanced embed detection
+    const isEmbedded = this.isEmbedded()
+    const hasWebGL = this.detectWebGLSupport()
+    
+    if (isEmbedded) {
+      // Use WebGL in embed mode if supported and parent allows it
+      if (hasWebGL && this.canUseWebGLInEmbed()) {
+        console.log('🎮 Embed mode: Using WebGL')
+        return Phaser.WEBGL
+      } else {
+        console.log('🎮 Embed mode: Using Canvas fallback')
+        return Phaser.CANVAS
+      }
+    }
+    
+    // Enhanced device detection
+    if (this.isMobileDevice() && !hasWebGL) {
+      console.log('🎮 Mobile mode: Using Canvas')
       return Phaser.CANVAS
     }
     
-    // Default to AUTO
+    // Default to AUTO for optimal selection
     console.log('🎮 Standalone mode: Using AUTO')
     return Phaser.AUTO
   }
 
   /**
-   * Check if game is embedded
+   * Enhanced embed detection
    */
   private isEmbedded(): boolean {
     try {
-      return window.self !== window.top
+      // Primary check
+      if (window.self !== window.top) return true
+      
+      // Secondary checks
+      if (document.referrer && new URL(document.referrer).hostname !== window.location.hostname) {
+        return true
+      }
+      
+      // Check for iframe element
+      if (window.frameElement) return true
+      
+      // Check URL parameters
+      const urlParams = new URLSearchParams(window.location.search)
+      if (urlParams.get('embed') === 'true') return true
+      
+      return false
     } catch (e) {
-      return true
+      return true // Cross-origin iframe
     }
+  }
+  
+  /**
+   * WebGL support detection
+   */
+  private detectWebGLSupport(): boolean {
+    try {
+      const canvas = document.createElement('canvas')
+      return !!(window.WebGLRenderingContext && (
+        canvas.getContext('webgl') || 
+        canvas.getContext('experimental-webgl')
+      ))
+    } catch (e) {
+      return false
+    }
+  }
+  
+  /**
+   * Check if WebGL is allowed in embed context
+   */
+  private canUseWebGLInEmbed(): boolean {
+    try {
+      // Check iframe sandbox attributes
+      const iframe = window.frameElement as HTMLIFrameElement
+      if (iframe) {
+        const sandbox = iframe.getAttribute('sandbox')
+        return !sandbox || sandbox.includes('allow-scripts')
+      }
+      return true
+    } catch (e) {
+      return false // Cross-origin, assume restricted
+    }
+  }
+  
+  /**
+   * Mobile device detection
+   */
+  private isMobileDevice(): boolean {
+    return /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent) ||
+           ('ontouchstart' in window) ||
+           navigator.maxTouchPoints > 0
   }
 
   /**
@@ -199,6 +276,10 @@ export class GameManager {
     
     if (this.responsiveManager) {
       this.responsiveManager.destroy()
+    }
+    
+    if (this.embedManager) {
+      this.embedManager.destroy()
     }
     
     if (this.pwaManager) {

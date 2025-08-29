@@ -1,0 +1,21 @@
+# Ignore development files
+node_modules/
+.git/
+.DS_Store
+*.log
+
+# Ignore source files (only deploy build)
+src/
+tests/
+coverage/
+
+# Ignore config files
+tsconfig.json
+vite.config.ts
+jest.config.js
+.eslintrc.js
+.prettierrc
+
+# Keep only distribution and examples
+# dist/ will be built by Vercel
+# examples/ needed for game examples
