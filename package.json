@@ -1,0 +1,32 @@
+{
+  "name": "@smtheapex/phaser-framework",
+  "version": "1.0.0",
+  "description": "Modular Phaser 3 Framework with RexUI and DOM integration",
+  "main": "dist/index.js",
+  "types": "dist/index.d.ts",
+  "scripts": {
+    "build": "tsc",
+    "dev": "tsc --watch",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [
+    "phaser3",
+    "game-framework",
+    "rexui",
+    "typescript",
+    "dom-integration"
+  ],
+  "author": "smtheapex",
+  "license": "MIT",
+  "dependencies": {
+    "phaser": "^3.70.0",
+    "phaser3-rex-plugins": "^1.80.0"
+  },
+  "devDependencies": {
+    "@types/node": "^20.0.0",
+    "typescript": "^5.0.0"
+  },
+  "peerDependencies": {
+    "phaser": "^3.70.0"
+  }
+}
